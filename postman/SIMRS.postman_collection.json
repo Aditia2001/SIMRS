@@ -1,0 +1,1877 @@
+{
+  "info": {
+    "_postman_id": "231cc86b-334e-49aa-9767-84956f359088",
+    "name": "SIMRS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46906670",
+    "_collection_link": "https://go.postman.co/collection/46906670-231cc86b-334e-49aa-9767-84956f359088?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Login berhasil\", function () {\r\n    pm.response.to.have.status(200);\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nif (pm.response.code === 200 && response.data?.access_token) {\r\n    pm.environment.set(\r\n        \"access_token\",\r\n        response.data.access_token\r\n    );\r\n\r\n    console.log(\"Access token berhasil diperbarui\");\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"Admin\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{yii_base_url}}/auth/login",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"success\": true,\r\n  \"message\": \"Profil pengguna berhasil diambil.\",\r\n  \"data\": {\r\n    \"id\": \"uuid-user\",\r\n    \"username\": \"admin\",\r\n    \"full_name\": \"SIMRS Administrator\",\r\n    \"role\": {\r\n      \"code\": \"ADMIN\",\r\n      \"name\": \"Administrator\"\r\n    }\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{yii_base_url}}/auth/me",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Preflight Login CORS",
+          "request": {
+            "method": "OPTIONS",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/auth/login",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Master Data",
+      "item": [
+        {
+          "name": "Patients",
+          "item": [
+            {
+              "name": "Get Patients",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/patients",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "patients"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Patient By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": ""
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Patient",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\npm.test(\"Pasien berhasil dibuat\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\"patient_id\", response.data.id);\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"full_name\": \"Budi Santoso\",\r\n  \"gender\": \"MALE\",\r\n  \"birth_date\": \"1998-05-15\",\r\n  \"identity_number\": \"3201011505980001\",\r\n  \"phone\": \"081234567890\",\r\n  \"address\": \"Bandung\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/patients",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "patients"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Patient",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"full_name\": \"Budi Santoso\",\r\n  \"gender\": \"MALE\",\r\n  \"birth_date\": \"1998-05-15\",\r\n  \"phone\": \"081298765432\",\r\n  \"address\": \"Bandung Timur\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/patients/{{patient_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "patients",
+                    "{{patient_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Polyclinics",
+          "item": [
+            {
+              "name": "Get Polyclinics",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/polyclinics",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "polyclinics"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Polyclinic By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/polyclinics/{{polyclinic_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "polyclinics",
+                    "{{polyclinic_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Polyclinic",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\npm.test(\"Poliklinik berhasil dibuat\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\"polyclinic_id\", response.data.id);\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Poli Umum\",\r\n  \"description\": \"Pelayanan pemeriksaan kesehatan umum\",\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/polyclinics",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "polyclinics"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Polyclinic",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Poli Umum\",\r\n  \"description\": \"Pelayanan kesehatan umum dan konsultasi\",\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/polyclinics/{{polyclinic_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "polyclinics",
+                    "{{polyclinic_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Medical Staff",
+          "item": [
+            {
+              "name": "Get Medical Staff",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-staff",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-staff"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Medical Staff By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-staff/{{medical_staff_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-staff",
+                    "{{medical_staff_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Medical Staff",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\"medical_staff_id\", response.data.id);\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"full_name\": \"dr. Abimana\",\r\n  \"staff_type\": \"DOCTOR\",\r\n  \"specialization\": \"Dokter Umum\",\r\n  \"license_number\": \"SIP-2026-002\",\r\n  \"phone\": \"081234567890\",\r\n  \"is_active\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-staff",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-staff"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Medical Staff",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"full_name\": \"dr. Abimana\",\r\n  \"staff_type\": \"DOCTOR\",\r\n  \"specialization\": \"Penyakit Dalam\",\r\n  \"license_number\": \"SIP-2026-002\",\r\n  \"phone\": \"081234567890\",\r\n  \"is_active\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-staff/{{medical_staff_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-staff",
+                    "{{medical_staff_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Doctor Schedules",
+          "item": [
+            {
+              "name": "Get Doctor Schedules",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/doctor-schedules",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "doctor-schedules"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Doctor Schedule By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/doctor-schedules/{{doctor_schedule_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "doctor-schedules",
+                    "{{doctor_schedule_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Doctor Schedule",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\npm.test(\"Doctor schedule berhasil dibuat\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n    pm.expect(response.data.id).to.exist;\r\n});\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\r\n        \"doctor_schedule_id\",\r\n        response.data.id\r\n    );\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"doctor_id\": \"69ef23bc-4a16-487b-ba81-7127ef489e60\",\r\n  \"polyclinic_id\": \"409f6a6c-7446-4478-b0c4-0fb91f95f90b\",\r\n  \"day_of_week\": 1,\r\n  \"start_time\": \"08:00\",\r\n  \"end_time\": \"12:00\",\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/doctor-schedules",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "doctor-schedules"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Doctor Schedule",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"day_of_week\": 1,\r\n  \"start_time\": \"09:00\",\r\n  \"end_time\": \"13:00\",\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/doctor-schedules/{{doctor_schedule_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "doctor-schedules",
+                    "{{doctor_schedule_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Medical Actions",
+          "item": [
+            {
+              "name": "Get Medical Actions",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-actions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-actions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Medical Action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\npm.test(\"Create Medical Action berhasil\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nif (\r\n    pm.response.code === 201 &&\r\n    response.success === true &&\r\n    response.data?.id\r\n) {\r\n    pm.environment.set(\r\n        \"medical_action_id\",\r\n        response.data.id\r\n    );\r\n\r\n    console.log(\r\n        \"Medical Action ID tersimpan:\",\r\n        response.data.id\r\n    );\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Konsultasi Dokter Umum\",\r\n  \"description\": \"Pemeriksaan dan konsultasi oleh dokter umum\",\r\n  \"tariff\": 75000,\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-actions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-actions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET Medical Action By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-actions/{{medical_action_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-actions",
+                    "{{medical_action_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Medical Action",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Konsultasi Dokter Umum\",\r\n  \"description\": \"Pemeriksaan umum dan konsultasi dokter\",\r\n  \"tariff\": 100000,\r\n  \"is_active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-actions/{{medical_action_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-actions",
+                    "{{medical_action_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patient Services",
+      "item": [
+        {
+          "name": "Visits",
+          "item": [
+            {
+              "name": "Get Visits",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Visit By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Visits By Patient",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/patients/{{patient_id}}/visits",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "patients",
+                    "{{patient_id}}",
+                    "visits"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Visit",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Visit berhasil dibuat\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n    pm.expect(response.data.id).to.exist;\r\n});\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\"visit_id\", response.data.id);\r\n    pm.environment.set(\"patient_id\", response.data.patient_id);\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"patient_id\": \"f0a920bc-0b3e-4790-948b-2533b05391d1\",\r\n  \"polyclinic_id\": \"409f6a6c-7446-4478-b0c4-0fb91f95f90b\",\r\n  \"doctor_id\": \"69ef23bc-4a16-487b-ba81-7127ef489e60\",\r\n  \"visit_date\": \"2026-12-7\",\r\n  \"registration_fee\": 25000\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/visits",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Visit Status",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Visit Status Updated Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data).to.have.property(\"status\");\r\n\r\n    const expectedStatus =\r\n        JSON.parse(pm.request.body.raw).status;\r\n\r\n    pm.expect(json.data.status).to.eql(expectedStatus);\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"status\": \"COMPLETED\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}/status",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Medical Records",
+          "item": [
+            {
+              "name": "Get Medical Records",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-records",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-records"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Medical Record By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-records/{{medical_record_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-records",
+                    "{{medical_record_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Medical Records By Visit",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}/medical-records",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}",
+                    "medical-records"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Medical Record",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\nconst response = pm.response.json();\r\n\r\nif (\r\n    pm.response.code === 201 &&\r\n    response.success === true &&\r\n    response.data?.id\r\n) {\r\n    pm.environment.set(\r\n        \"medical_record_id\",\r\n        response.data.id\r\n    );\r\n\r\n    if (response.data?.visit_id) {\r\n        pm.environment.set(\r\n            \"visit_id\",\r\n            response.data.visit_id\r\n        );\r\n    }\r\n\r\n    console.log(\"Medical Record ID:\", response.data.id);\r\n    console.log(\"Visit ID:\", response.data.visit_id);\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"visit_id\": \"6b580055-3a63-4d1c-90c8-be8ac1201377\",\r\n  \"chief_complaint\": \"Demam dan sakit kepala\",\r\n  \"anamnesis\": \"Demam sejak tiga hari terakhir\",\r\n  \"blood_pressure\": \"120/80\",\r\n  \"heart_rate\": 80,\r\n  \"respiratory_rate\": 18,\r\n  \"temperature\": 38.2,\r\n  \"oxygen_saturation\": 98,\r\n  \"weight\": 65,\r\n  \"height\": 170,\r\n  \"physical_examination\": \"Pasien sadar dan responsif\",\r\n  \"primary_diagnosis\": \"Febris\",\r\n  \"secondary_diagnosis\": null\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-records",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-records"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Medical Record",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"chief_complaint\": \"Demam, sakit kepala, dan batuk\",\r\n  \"anamnesis\": \"Keluhan berlangsung selama tiga hari\",\r\n  \"temperature\": 37.9,\r\n  \"primary_diagnosis\": \"Infeksi saluran pernapasan atas\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medical-records/{{medical_record_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medical-records",
+                    "{{medical_record_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Visit Actions",
+          "item": [
+            {
+              "name": "Create Visit Action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\r\n\r\npm.test(\"Create Visit Action berhasil\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nif (pm.response.code === 201 && response.data?.id) {\r\n    pm.environment.set(\"visit_action_id\", response.data.id);\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"visit_id\": \"031b7931-3356-47cc-afaa-7c5a0dba0882\",\r\n  \"medical_action_id\": \"a54525ab-449c-4d1a-a8ea-c37a2c4483ca\",\r\n  \"quantity\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/visit-actions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visit-actions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Visit Action",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"GET Visit Action berhasil\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response sukses\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visit-actions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visit-actions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Visit Action By ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"GET Visit Action berhasil\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response sukses\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visit-actions/{{visit_action_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visit-actions",
+                    "{{visit_action_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Visit Action By Visit ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"GET Visit Action berhasil\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response sukses\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.success).to.eql(true);\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}/actions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}",
+                    "actions"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "item": [
+        {
+          "name": "Payments",
+          "item": [
+            {
+              "name": "Get Payments",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/payments",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "payments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/payments/{{payment_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "{{payment_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payments By Billing",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/billings/{{billing_id}}/payments",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "billings",
+                    "{{billing_id}}",
+                    "payments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Payment",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Create Payment - Status 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Create Payment - Success\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.success).to.eql(true);\r\n    pm.expect(response.data).to.have.property(\"id\");\r\n    pm.expect(response.data).to.have.property(\"code\");\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n    const response = pm.response.json();\r\n\r\n    if (response.success && response.data?.id) {\r\n        pm.environment.set(\"payment_id\", response.data.id);\r\n\r\n        console.log(\"Payment ID:\", response.data.id);\r\n        console.log(\"Payment Code:\", response.data.code);\r\n    }\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"billing_id\": \"{{billing_id}}\",\r\n  \"amount\": 60000,\r\n  \"payment_method\": \"NON_CASH\",\r\n  \"idempotency_key\": \"{{$guid}}\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/payments",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "payments"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get Billing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/billings",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "billings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Billing By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/billings/{{billing_id}}",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "billings",
+                "{{billing_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Billing By Visit ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/visits/{{visit_id}}/billing",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "visits",
+                "{{visit_id}}",
+                "billing"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Billing",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Billing contains all 4 item types\", function () {\r\n    const json = pm.response.json();\r\n    const types = json.data.items.map(item => item.item_type);\r\n\r\n    [\"REGISTRATION\", \"ACTION\", \"LAB\", \"MEDICINE\"].forEach(type => {\r\n        pm.expect(types).to.include(type);\r\n    });\r\n});\r\n\r\npm.test(\"Billing total matches item subtotals\", function () {\r\n    const json = pm.response.json();\r\n\r\n    const total = json.data.items.reduce(\r\n        (sum, item) => sum + Math.round(Number(item.subtotal) * 100),\r\n        0\r\n    );\r\n\r\n    pm.expect(Math.round(Number(json.data.total_amount) * 100))\r\n        .to.eql(total);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n  \"visit_id\": \"{{visit_id}}\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{yii_base_url}}/billings",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "billings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Billing Invoice",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Invoice Retrieved Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.document_type).to.eql(\"INVOICE\");\r\n    pm.expect(json.data.items).to.be.an(\"array\");\r\n    pm.expect(json.data).to.have.property(\"total_amount\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/billings/{{billing_id}}/invoice",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "billings",
+                "{{billing_id}}",
+                "invoice"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Billing Receipt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Receipt Retrieved Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.document_type).to.eql(\"PAYMENT_RECEIPT\");\r\n    pm.expect(json.data.payments).to.be.an(\"array\");\r\n    pm.expect(json.data.payments.length).to.be.above(0);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{yii_base_url}}/billings/{{billing_id}}/receipt",
+              "host": [
+                "{{yii_base_url}}"
+              ],
+              "path": [
+                "billings",
+                "{{billing_id}}",
+                "receipt"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pharmacy",
+      "item": [
+        {
+          "name": "Medicines",
+          "item": [
+            {
+              "name": "Get Medicines",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is an Array\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medicines",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medicines"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Medicine By ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Medicine ID Matches\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.id).to.eql(\r\n        pm.environment.get(\"medicine_id\")\r\n    );\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medicines/{{medicine_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medicines",
+                    "{{medicine_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Medicine",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Medicine Created Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data).to.have.property(\"id\");\r\n    pm.expect(json.data.code).to.eql(\"OBT001\");\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n    const json = pm.response.json();\r\n\r\n    if (json.success && json.data?.id) {\r\n        pm.environment.set(\"medicine_id\", json.data.id);\r\n        console.log(\"Medicine ID:\", json.data.id);\r\n    }\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"code\": \"OBT001\",\r\n  \"name\": \"Paracetamol 500 mg\",\r\n  \"unit\": \"Tablet\",\r\n  \"price\": 5000,\r\n  \"stock\": 100,\r\n  \"is_active\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medicines",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medicines"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Medicine",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Medicine Updated Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.name).to.eql(\r\n        \"Paracetamol 500 mg Tablet\"\r\n    );\r\n    pm.expect(Number(json.data.price)).to.eql(6000);\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"name\": \"Paracetamol 500 mg Tablet\",\r\n  \"unit\": \"Tablet\",\r\n  \"price\": 6000\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/medicines/{{medicine_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medicines",
+                    "{{medicine_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Medicine",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Medicine Deactivated Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.is_active).to.eql(false);\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/medicines/{{medicine_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "medicines",
+                    "{{medicine_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Prescriptions",
+          "item": [
+            {
+              "name": "Get Prescriptions",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/prescriptions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "prescriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Prescription By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/prescriptions/{{prescription_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "prescriptions",
+                    "{{prescription_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Prescriptions By Visit",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}/prescriptions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}",
+                    "prescriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Prescription",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Prescription Created Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data).to.have.property(\"id\");\r\n    pm.expect(json.data.status).to.eql(\"PENDING\");\r\n    pm.expect(json.data.items).to.be.an(\"array\");\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n    const json = pm.response.json();\r\n\r\n    if (json.success && json.data?.id) {\r\n        pm.environment.set(\r\n            \"prescription_id\",\r\n            json.data.id\r\n        );\r\n    }\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"visit_id\": \"{{visit_id}}\",\r\n  \"items\": [\r\n    {\r\n      \"medicine_id\": \"{{medicine_id}}\",\r\n      \"dosage\": \"500 mg\",\r\n      \"frequency\": \"3 kali sehari\",\r\n      \"quantity\": 10\r\n    }\r\n  ]\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/prescriptions",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "prescriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Dispense Prescription",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Prescription Dispensed Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.status).to.eql(\"DISPENSED\");\r\n    pm.expect(json.data.dispensed_at).to.not.be.null;\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/prescriptions/{{prescription_id}}/dispense",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "prescriptions",
+                    "{{prescription_id}}",
+                    "dispense"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Laboratory",
+      "item": [
+        {
+          "name": "Lab Requests",
+          "item": [
+            {
+              "name": "Get Lab Requests",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/lab-requests",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "lab-requests"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Lab Request By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/lab-requests/{{lab_request_id}}",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "lab-requests",
+                    "{{lab_request_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Lab Requests By Visit",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{yii_base_url}}/visits/{{visit_id}}/lab-requests",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "visits",
+                    "{{visit_id}}",
+                    "lab-requests"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Lab Request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Lab Request Created Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.status).to.eql(\"PENDING\");\r\n    pm.expect(json.data).to.have.property(\"id\");\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n    const json = pm.response.json();\r\n\r\n    if (json.success && json.data?.id) {\r\n        pm.environment.set(\"lab_request_id\", json.data.id);\r\n    }\r\n}\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"visit_id\": \"{{visit_id}}\",\r\n  \"examination_name\": \"Pemeriksaan Hemoglobin\",\r\n  \"notes\": \"Pemeriksaan darah rutin\",\r\n  \"tariff\": 75000\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/lab-requests",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "lab-requests"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Lab Result",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Lab Result Saved Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data.status).to.eql(\"COMPLETED\");\r\n    pm.expect(json.data.results).to.be.an(\"array\");\r\n    pm.expect(json.data.results.length).to.be.above(0);\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"result_value\": \"13.5\",\r\n  \"unit\": \"g/dL\",\r\n  \"reference_range\": \"12.0 - 16.0\",\r\n  \"notes\": \"Hasil pemeriksaan dalam rentang referensi yang dicantumkan\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{yii_base_url}}/lab-requests/{{lab_request_id}}/results",
+                  "host": [
+                    "{{yii_base_url}}"
+                  ],
+                  "path": [
+                    "lab-requests",
+                    "{{lab_request_id}}",
+                    "results"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Node Integration",
+          "item": [
+            {
+              "name": "Get Lab Integration Health",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{node_base_url}}/lab/health",
+                  "host": [
+                    "{{node_base_url}}"
+                  ],
+                  "path": [
+                    "lab",
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Lab Integration Requests",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{node_base_url}}/lab/requests",
+                  "host": [
+                    "{{node_base_url}}"
+                  ],
+                  "path": [
+                    "lab",
+                    "requests"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Lab Integration Request By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{node_base_url}}/lab/requests/{{lab_request_id}}",
+                  "host": [
+                    "{{node_base_url}}"
+                  ],
+                  "path": [
+                    "lab",
+                    "requests",
+                    "{{lab_request_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Submit Lab Integration Result",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\r\npm.test(\"Status Code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Lab Result Submitted Successfully\", function () {\r\n    const json = pm.response.json();\r\n\r\n    pm.expect(json.success).to.eql(true);\r\n    pm.expect(json.data).to.have.property(\"id\");\r\n    pm.expect(json.data).to.have.property(\"lab_request_id\");\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n{\r\n  \"lab_request_id\": \"{{lab_request_id}}\",\r\n  \"result_value\": \"13.5\",\r\n  \"unit\": \"g/dL\",\r\n  \"reference_range\": \"12.0 - 16.0\",\r\n  \"notes\": \"Hasil pemeriksaan hemoglobin.\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{node_base_url}}/lab/results",
+                  "host": [
+                    "{{node_base_url}}"
+                  ],
+                  "path": [
+                    "lab",
+                    "results"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Yii2 Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{yii_base_url}}/health",
+          "host": [
+            "{{yii_base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Node.js Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{node_base_url}}/health",
+          "host": [
+            "{{node_base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
